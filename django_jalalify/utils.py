@@ -1,18 +1,18 @@
 from datetime import datetime
 from typing import Tuple
-
+import jdatetime
 import pytz
 
 from django_jalalify import JalaliDatetime
 from django_jalalify.functions import convert_date_to_int, convert_time_to_int
-from django_jalalify.timezone import TEHRAN_ZONE, TEHRAN_LMT_ZONE,  TehranTimezone
+from django_jalalify.timezone import TEHRAN_ZONE, TEHRAN_LMT_ZONE, tehran_timezone
 
 
 def tehran_now() -> datetime: return datetime.now(pytz.timezone('Asia/Tehran'))
 
 
-def get_now_tehran_jalali_datetime() -> JalaliDatetime:
-    return JalaliDatetime.now(TehranTimezone())
+def get_now_tehran_jalali_datetime():
+    return jdatetime.datetime.fromgregorian(datetime=datetime.now().astimezone(tehran_timezone))
 
 
 def get_now_tehran_jalali_date_strftime(string_format="%Y/%m/%d") -> str:
@@ -42,7 +42,7 @@ def get_tehran_timestamp_with_three_digits_of_microsecond_accuracy(timestamp) ->
 
 
 def get_jalali_tehran_datetime_from_date_string(time) -> datetime:
-    return JalaliDatetime.strptime(time, "%Y/%m/%d %H:%M:%S").replace(tzinfo=TehranTimezone).todatetime()
+    return JalaliDatetime.strptime(time, "%Y/%m/%d %H:%M:%S").replace(tzinfo=tehran_timezone).todatetime()
 
 
 def int_jalali_date_to_jalali_datetime(date) -> datetime:
@@ -53,7 +53,7 @@ def int_jalali_date_to_jalali_datetime(date) -> datetime:
     date //= 100
     month = date % 100
     year = date // 100
-    return JalaliDatetime(year=year, month=month, day=day, tzinfo=TehranTimezone()).todatetime()
+    return JalaliDatetime(year=year, month=month, day=day, tzinfo=tehran_timezone).todatetime()
 
 
 def str_of_int_to_jalali_datetime(date, time) -> datetime:
@@ -62,7 +62,7 @@ def str_of_int_to_jalali_datetime(date, time) -> datetime:
     """
     return JalaliDatetime(year=int(date[:4]), month=int(date[4:6]), day=int(date[6:8]),
                           hour=int(time[:2]), minute=int(time[2:4]), second=int(time[4:6]),
-                          tzinfo=TehranTimezone()).todatetime()
+                          tzinfo=tehran_timezone).todatetime()
 
 
 def jalali_datetime_to_int(jalali_datetime) -> Tuple:

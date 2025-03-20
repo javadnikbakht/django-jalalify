@@ -70,3 +70,5 @@ class TehranTimezone(Timezone):
             TEHRAN_OFFSET,
             "Asia/Tehran"
         )
+
+tehran_timezone = TehranTimezone()
