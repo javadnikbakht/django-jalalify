@@ -53,7 +53,7 @@ def int_jalali_date_to_jalali_datetime(date) -> datetime:
     date //= 100
     month = date % 100
     year = date // 100
-    return jdatetime.datetime(year=year, month=month, day=day, tzinfo=tehran_timezone)
+    return jdatetime.datetime(year=year, month=month, day=day, tzinfo=tehran_timezone).togregorian()
 
 
 def str_of_int_to_jalali_datetime(date, time) -> datetime:
@@ -80,6 +80,5 @@ def convert_datetime_to_custom_jalali_date(date_time: datetime) -> int:
     e.g: datetime(2023-03-29) => 1402/01/09 => 14020109
     """
     dt_in_tehran_tz = date_time.astimezone(TEHRAN_LMT_ZONE)
-    date_in_jalali = jdatetime.datetime(
-        year=dt_in_tehran_tz, month=dt_in_tehran_tz, day=dt_in_tehran_tz.day).strftime("%Y%m%d")
+    date_in_jalali = jdatetime.datetime.fromgregorian(datetime=dt_in_tehran_tz).strftime("%Y%m%d")
     return convert_date_to_int(date_in_jalali)
